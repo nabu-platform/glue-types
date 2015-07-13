@@ -1,0 +1,3 @@
+be.nabu.glue.types.XMLContextAccessor
+be.nabu.glue.types.JavaBeanAccessor
+be.nabu.glue.types.ComplexContentAccessor
