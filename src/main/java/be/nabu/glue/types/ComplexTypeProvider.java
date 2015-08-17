@@ -48,6 +48,11 @@ public class ComplexTypeProvider implements OptionalTypeProvider {
 			}
 			return TypeConverterFactory.getInstance().getConverter().convert(object, new BaseTypeInstance(sourceType), new BaseTypeInstance(type));
 		}
+
+		@Override
+		public Class<?> getComponentType() {
+			return Object.class;
+		}
 		
 	}
 }
