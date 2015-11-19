@@ -43,7 +43,7 @@ public class GlueTypeUtils {
 				values.add(new ValueImpl<Integer>(MaxOccursProperty.getInstance(), 0));
 			}
 			// if there is a default value, set it to optional
-			if (description.getDefaultValue() != null && !description.getDefaultValue().isEmpty()) {
+			if (description.getDefaultValue() != null) {
 				values.add(new ValueImpl<Integer>(MinOccursProperty.getInstance(), 0));
 			}
 			if (type instanceof ComplexType) {
