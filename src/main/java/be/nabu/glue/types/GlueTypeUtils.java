@@ -27,7 +27,7 @@ import be.nabu.libs.types.properties.NillableProperty;
 public class GlueTypeUtils {
 	
 	public static ComplexType toType(List<ParameterDescription> parameters, ModifiableComplexTypeGenerator generator, ScriptRepository repository) {
-		return toType(null, generator, repository);
+		return toType(null, parameters, generator, repository);
 	}
 	
 	public static ComplexType toType(String name, List<ParameterDescription> parameters, ModifiableComplexTypeGenerator generator, ScriptRepository repository) {
