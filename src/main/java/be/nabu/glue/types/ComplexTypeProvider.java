@@ -47,6 +47,9 @@ public class ComplexTypeProvider implements OptionalTypeProvider {
 			else if (object instanceof Map) {
 				return new MaskedContent(new MapContent((ComplexType) type, (Map) object), (ComplexType) type);
 			}
+			else if (object instanceof MapContent) {
+				return new MaskedContent((MapContent) object, (ComplexType) type);
+			}
 			
 			Type sourceType = null;
 			if (object instanceof ComplexContent) {
