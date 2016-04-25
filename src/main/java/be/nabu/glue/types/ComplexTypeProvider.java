@@ -1,15 +1,18 @@
 package be.nabu.glue.types;
 
+import java.util.Collection;
 import java.util.Map;
 
 import be.nabu.glue.api.ExecutionContext;
 import be.nabu.glue.api.OptionalTypeConverter;
 import be.nabu.glue.api.OptionalTypeProvider;
 import be.nabu.libs.types.BaseTypeInstance;
+import be.nabu.libs.types.CollectionHandlerFactory;
 import be.nabu.libs.types.ComplexContentWrapperFactory;
 import be.nabu.libs.types.DefinedTypeResolverFactory;
 import be.nabu.libs.types.SimpleTypeWrapperFactory;
 import be.nabu.libs.types.TypeConverterFactory;
+import be.nabu.libs.types.api.CollectionHandlerProvider;
 import be.nabu.libs.types.api.ComplexContent;
 import be.nabu.libs.types.api.ComplexType;
 import be.nabu.libs.types.api.DefinedSimpleType;
@@ -49,6 +52,17 @@ public class ComplexTypeProvider implements OptionalTypeProvider {
 			}
 			else if (object instanceof MapContent) {
 				return new MaskedContent((MapContent) object, (ComplexType) type);
+			}
+			
+			CollectionHandlerProvider handler = CollectionHandlerFactory.getInstance().getHandler().getHandler(object.getClass());
+			// we have a collection on our hands
+			if (handler != null) {
+				Collection indexes = handler.getIndexes(object);
+				Object newCollection = handler.create(object.getClass(), indexes.size());
+				for (Object index : indexes) {
+					handler.set(newCollection, index, convert(handler.get(object, index)));
+				}
+				return newCollection;
 			}
 			
 			Type sourceType = null;
