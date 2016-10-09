@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import be.nabu.glue.ScriptUtils;
 import be.nabu.glue.api.ParameterDescription;
 import be.nabu.glue.api.Script;
 import be.nabu.glue.api.ScriptRepository;
-import be.nabu.glue.impl.DefaultOptionalTypeProvider;
+import be.nabu.glue.core.impl.DefaultOptionalTypeProvider;
+import be.nabu.glue.utils.ScriptUtils;
 import be.nabu.libs.property.api.Value;
 import be.nabu.libs.types.DefinedTypeResolverFactory;
 import be.nabu.libs.types.api.ComplexType;

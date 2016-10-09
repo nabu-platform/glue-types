@@ -4,8 +4,8 @@ import java.util.Collection;
 import java.util.Map;
 
 import be.nabu.glue.api.ExecutionContext;
-import be.nabu.glue.api.OptionalTypeConverter;
-import be.nabu.glue.api.OptionalTypeProvider;
+import be.nabu.glue.core.api.OptionalTypeConverter;
+import be.nabu.glue.core.api.OptionalTypeProvider;
 import be.nabu.libs.types.BaseTypeInstance;
 import be.nabu.libs.types.CollectionHandlerFactory;
 import be.nabu.libs.types.ComplexContentWrapperFactory;
