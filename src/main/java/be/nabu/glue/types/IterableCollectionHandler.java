@@ -9,20 +9,21 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import be.nabu.glue.core.api.CollectionIterable;
 import be.nabu.glue.core.impl.methods.ScriptMethods;
 import be.nabu.glue.core.impl.methods.v2.SeriesMethods;
 import be.nabu.libs.types.IntegerCollectionProviderBase;
 
 @SuppressWarnings("rawtypes")
-public class IterableCollectionHandler extends IntegerCollectionProviderBase<Iterable> {
+public class IterableCollectionHandler extends IntegerCollectionProviderBase<CollectionIterable> {
 
 	public IterableCollectionHandler() {
-		super(Iterable.class);
+		super(CollectionIterable.class);
 	}
 
 	@Override
-	public Iterable create(Class<? extends Iterable> definitionClass, int size) {
-		return new ArrayList<Object>(size);
+	public CollectionIterable create(Class<? extends CollectionIterable> definitionClass, int size) {
+		return new CollectionArrayList<Object>(size);
 	}
 
 	@Override
@@ -46,24 +47,24 @@ public class IterableCollectionHandler extends IntegerCollectionProviderBase<Ite
 	}
 
 	@Override
-	public Iterable set(Iterable collection, Integer index, Object value) {
+	public CollectionIterable set(CollectionIterable collection, Integer index, Object value) {
 		if (collection == null) {
-			collection = new ArrayList<Object>();
+			collection = new CollectionArrayList<Object>();
 		}
 		int size = ScriptMethods.size(collection);
 		if (index >= size) {
 			List padding = Arrays.asList(new Object[index - size]);
-			return (Iterable) SeriesMethods.merge(collection, padding, value);
+			return (CollectionIterable) SeriesMethods.merge(collection, padding, value);
 		}
 		else {
 			Iterable<?> start = SeriesMethods.limit(index, collection);
 			Iterable<?> end = SeriesMethods.offset(index, collection);
-			return (Iterable) SeriesMethods.merge(start, value, end);
+			return (CollectionIterable) SeriesMethods.merge(start, value, end);
 		}
 	}
 
 	@Override
-	public Object get(Iterable collection, Integer index) {
+	public Object get(CollectionIterable collection, Integer index) {
 		if (collection == null || index >= ScriptMethods.size(collection)) {
 			return null;
 		}
@@ -72,23 +73,37 @@ public class IterableCollectionHandler extends IntegerCollectionProviderBase<Ite
 	}
 
 	@Override
-	public Iterable delete(Iterable collection, Integer index) {
+	public CollectionIterable delete(CollectionIterable collection, Integer index) {
 		if (collection == null || index >= ScriptMethods.size(collection)) {
 			return collection;
 		}
 		Iterable<?> start = SeriesMethods.limit(index, collection);
 		Iterable<?> end = SeriesMethods.offset(index + 1, collection);
-		return (Iterable) SeriesMethods.merge(start, end);
+		return (CollectionIterable) SeriesMethods.merge(start, end);
 	}
 
 	@Override
-	public Collection<?> getAsCollection(Iterable collection) {
+	public Collection<?> getAsCollection(CollectionIterable collection) {
 		return collection == null ? null : SeriesMethods.resolve(collection);
 	}
 
 	@Override
-	public Collection<Integer> getIndexes(Iterable collection) {
+	public Collection<Integer> getIndexes(CollectionIterable collection) {
 		return generateIndexes(collection == null ? 0 : ScriptMethods.size(collection));
 	}
 
+	public static class CollectionArrayList<T> extends ArrayList<T> implements CollectionIterable<T> {
+
+		private static final long serialVersionUID = 1L;
+
+		public CollectionArrayList() {
+			// empty
+		}
+		public CollectionArrayList(Collection<? extends T> c) {
+			super(c);
+		}
+		public CollectionArrayList(int initialCapacity) {
+			super(initialCapacity);
+		}
+	}
 }
