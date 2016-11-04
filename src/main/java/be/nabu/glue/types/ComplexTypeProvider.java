@@ -12,6 +12,7 @@ import be.nabu.libs.types.ComplexContentWrapperFactory;
 import be.nabu.libs.types.DefinedTypeResolverFactory;
 import be.nabu.libs.types.SimpleTypeWrapperFactory;
 import be.nabu.libs.types.TypeConverterFactory;
+import be.nabu.libs.types.TypeUtils;
 import be.nabu.libs.types.api.CollectionHandlerProvider;
 import be.nabu.libs.types.api.ComplexContent;
 import be.nabu.libs.types.api.ComplexType;
@@ -84,6 +85,9 @@ public class ComplexTypeProvider implements OptionalTypeProvider {
 			}
 			if (sourceType == null) {
 				throw new ClassCastException("Can not resolve the class " + type.getClass() + " to a type");
+			}
+			if (sourceType.equals(type) || !TypeUtils.getUpcastPath(sourceType, type).isEmpty()) {
+				return object;
 			}
 			// check if converted is null? if it is null but source is not, we failed conversion?
 			Object convert = TypeConverterFactory.getInstance().getConverter().convert(object, new BaseTypeInstance(sourceType), new BaseTypeInstance(type));
