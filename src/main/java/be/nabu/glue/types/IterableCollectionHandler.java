@@ -7,7 +7,9 @@ import java.lang.reflect.WildcardType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import be.nabu.glue.core.api.CollectionIterable;
 import be.nabu.glue.core.impl.methods.ScriptMethods;
@@ -82,6 +84,34 @@ public class IterableCollectionHandler extends IntegerCollectionProviderBase<Col
 		return (CollectionIterable) SeriesMethods.merge(start, end);
 	}
 
+	@Override
+	public Iterable<?> getAsIterable(final CollectionIterable collection) {
+		return new Iterable() {
+			public Iterator iterator() {
+				return new Iterator() {
+					private Iterator original = collection.iterator();
+					@Override
+					public boolean hasNext() {
+						return original.hasNext();
+					}
+					@Override
+					public Object next() {
+						Object next = original.next();
+						if (next instanceof Callable) {
+							try {
+								next = ((Callable) next).call();
+							}
+							catch (Exception e) {
+								throw new RuntimeException(e);
+							}
+						}
+						return next;
+					}
+				};
+			}
+		};
+	}
+	
 	@Override
 	public Collection<?> getAsCollection(CollectionIterable collection) {
 		return collection == null ? null : SeriesMethods.resolve(collection);
