@@ -65,6 +65,9 @@ public class GlueTypeUtils {
 					}
 				}
 			}
+			if (type == null) {
+				throw new IllegalArgumentException("Can not resolve type: " + typeString);
+			}
 			List<Value<?>> values = new ArrayList<Value<?>>();
 			values.add(new ValueImpl<Boolean>(NillableProperty.getInstance(), true));
 			if (description.isList()) {
