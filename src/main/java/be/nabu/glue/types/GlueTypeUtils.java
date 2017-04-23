@@ -13,6 +13,7 @@ import be.nabu.glue.utils.ScriptUtils;
 import be.nabu.libs.property.api.Value;
 import be.nabu.libs.types.DefinedTypeResolverFactory;
 import be.nabu.libs.types.api.ComplexType;
+import be.nabu.libs.types.api.DefinedTypeResolver;
 import be.nabu.libs.types.api.ModifiableComplexType;
 import be.nabu.libs.types.api.ModifiableComplexTypeGenerator;
 import be.nabu.libs.types.api.SimpleType;
@@ -27,15 +28,23 @@ import be.nabu.libs.types.properties.NillableProperty;
 public class GlueTypeUtils {
 	
 	public static ComplexType toType(List<ParameterDescription> parameters, ModifiableComplexTypeGenerator generator, ScriptRepository repository) {
-		return toType(null, parameters, generator, repository);
+		return toType(null, parameters, generator, repository, DefinedTypeResolverFactory.getInstance().getResolver());
 	}
 	
 	public static ComplexType toType(String name, List<ParameterDescription> parameters, ModifiableComplexTypeGenerator generator, ScriptRepository repository) {
-		return toType(name, parameters, generator, repository, new HashMap<String, Type>());
+		return toType(name, parameters, generator, repository, new HashMap<String, Type>(), DefinedTypeResolverFactory.getInstance().getResolver());
 	}
-
+	
+	public static ComplexType toType(List<ParameterDescription> parameters, ModifiableComplexTypeGenerator generator, ScriptRepository repository, DefinedTypeResolver typeResolver) {
+		return toType(null, parameters, generator, repository, typeResolver);
+	}
+	
+	public static ComplexType toType(String name, List<ParameterDescription> parameters, ModifiableComplexTypeGenerator generator, ScriptRepository repository, DefinedTypeResolver typeResolver) {
+		return toType(name, parameters, generator, repository, new HashMap<String, Type>(), typeResolver);
+	}
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private static ComplexType toType(String name, List<ParameterDescription> parameters, ModifiableComplexTypeGenerator generator, ScriptRepository repository, Map<String, Type> resolved) {
+	private static ComplexType toType(String name, List<ParameterDescription> parameters, ModifiableComplexTypeGenerator generator, ScriptRepository repository, Map<String, Type> resolved, DefinedTypeResolver typeResolver) {
 		ModifiableComplexType structure = generator.newComplexType();
 		resolved.put(name, structure);
 		for (ParameterDescription description : parameters) {
@@ -52,12 +61,12 @@ public class GlueTypeUtils {
 			}
 			Type type = resolved.get(typeString);
 			if (type == null) {
-				type = DefinedTypeResolverFactory.getInstance().getResolver().resolve(typeString);
+				type = typeResolver.resolve(typeString);
 				if (type == null && repository != null) {
 					try {
 						Script script = repository.getScript(typeString);
 						if (script != null) {
-							type = toType(ScriptUtils.getFullName(script), ScriptUtils.getInputs(script), generator, repository, resolved);
+							type = toType(ScriptUtils.getFullName(script), ScriptUtils.getInputs(script), generator, repository, resolved, typeResolver);
 						}
 					}
 					catch (Exception e) {
