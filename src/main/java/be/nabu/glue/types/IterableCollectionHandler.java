@@ -70,7 +70,7 @@ public class IterableCollectionHandler extends IntegerCollectionProviderBase<Col
 		if (collection == null || index >= ScriptMethods.size(collection)) {
 			return null;
 		}
-		Iterable<?> start = SeriesMethods.limit(index, collection);
+		Iterable<?> start = SeriesMethods.offset(index, collection);
 		return SeriesMethods.first(start);
 	}
 
