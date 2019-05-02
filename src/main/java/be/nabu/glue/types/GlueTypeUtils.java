@@ -24,6 +24,7 @@ import be.nabu.libs.types.base.ValueImpl;
 import be.nabu.libs.types.properties.MaxOccursProperty;
 import be.nabu.libs.types.properties.MinOccursProperty;
 import be.nabu.libs.types.properties.NillableProperty;
+import be.nabu.libs.types.simple.Bytes;
 
 public class GlueTypeUtils {
 	
@@ -61,7 +62,12 @@ public class GlueTypeUtils {
 			}
 			Type type = resolved.get(typeString);
 			if (type == null) {
-				type = typeResolver.resolve(typeString);
+				if (typeString.equals("[B")) {
+					type = new Bytes();
+				}
+				else {
+					type = typeResolver.resolve(typeString);
+				}
 				if (type == null && repository != null) {
 					try {
 						Script script = repository.getScript(typeString);
