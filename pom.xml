@@ -45,5 +45,9 @@
 			<groupId>be.nabu.libs.evaluator</groupId>
 			<artifactId>evaluator-types</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>be.nabu.libs.types</groupId>
+			<artifactId>types-definition-xml</artifactId>
+		</dependency>
 	</dependencies>
 </project>
