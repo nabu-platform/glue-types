@@ -28,6 +28,7 @@ public class SchemaStaticMethodFactory implements StaticMethodFactory {
 	public List<Class<?>> getStaticMethodClasses() {
 		List<Class<?>> classes = new ArrayList<Class<?>>();
 		classes.add(SchemaMethods.class);
+		classes.add(ReflectionMethods.class);
 		return classes;
 	}
 

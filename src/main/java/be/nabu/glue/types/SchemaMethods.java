@@ -23,11 +23,15 @@ import java.nio.charset.Charset;
 
 import be.nabu.libs.evaluator.annotations.MethodProviderClass;
 import be.nabu.libs.types.ComplexContentWrapperFactory;
+import be.nabu.libs.types.DefinedTypeResolverFactory;
 import be.nabu.libs.types.api.ComplexContent;
+import be.nabu.libs.types.api.ComplexType;
 import be.nabu.libs.types.definition.xml.XMLDefinitionMarshaller;
+import be.nabu.libs.types.mask.MaskedContent;
 
 @MethodProviderClass(namespace = "schema")
 public class SchemaMethods {
+	
 	@SuppressWarnings("unchecked")
 	public static String describe(Object object) throws IOException {
 		ComplexContent content = object instanceof ComplexContent ? (ComplexContent) object : ComplexContentWrapperFactory.getInstance().getWrapper().wrap(object);
@@ -38,4 +42,5 @@ public class SchemaMethods {
 		new XMLDefinitionMarshaller().marshal(output, content.getType());
 		return new String(output.toByteArray(), Charset.defaultCharset());
 	}
+	
 }
